@@ -29,8 +29,10 @@ public class DataProcessor {
                     .mapToDouble(Customer::getPurchaseAmount)
                     .sum();
 
-            Optional<Customer> customerWithHighestPurchaseAmount = customers.stream()
-                    .max(Comparator.comparingDouble(Customer::getPurchaseAmount));
+
+            Customer customerWithHighestPurchaseAmount = customers.stream()
+                    .max((c1, c2) -> Double.compare(c1.getPurchaseAmount(), c2.getPurchaseAmount()))
+                    .orElse(null);
 
             Map<String, Double> averagePurchaseByCity = customers.stream()
                     .collect(Collectors.groupingBy(Customer::getCity, Collectors.averagingDouble(Customer::getPurchaseAmount)));
@@ -44,7 +46,7 @@ public class DataProcessor {
             // Report Generation
             System.out.println("Filtered Customers (Alphabetical Order): " + filteredNames);
             System.out.println("Total Purchase Amount: " + totalPurchaseAmount);
-            System.out.println("Customer(s) with Highest Purchase Amount: " + customerWithHighestPurchaseAmount.orElse(null));
+            System.out.println("Customer(s) with Highest Purchase Amount: " + customerWithHighestPurchaseAmount.getName());
             System.out.println("Average Purchase Amount by City: " + averagePurchaseByCity);
         }
 
