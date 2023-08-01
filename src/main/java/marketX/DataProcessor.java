@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataProcessor {
 
@@ -17,7 +18,7 @@ public class DataProcessor {
             List<Customer> customers = createSampleDataset();
 
             // Stream Operations
-            List<String> filteredNames = customers.stream()
+            /*List<String> filteredNames = customers.stream()
                     .filter(customer -> customer.getAge() >= 25 && customer.getAge() <= 40)
                     .filter(customer -> customer.getCity().equals("New York"))
                     .filter(customer -> customer.getGender() == Gender.Male || customer.getGender() == Gender.Female)
@@ -27,7 +28,7 @@ public class DataProcessor {
 
             double totalPurchaseAmount = customers.stream()
                     .mapToDouble(Customer::getPurchaseAmount)
-                    .sum();
+                    .sum();*/
 
 
             Customer customerWithHighestPurchaseAmount = customers.stream()
@@ -44,8 +45,8 @@ public class DataProcessor {
                     .collect(Collectors.toList());
 
             // Report Generation
-            System.out.println("Filtered Customers (Alphabetical Order): " + filteredNames);
-            System.out.println("Total Purchase Amount: " + totalPurchaseAmount);
+            System.out.println("Filtered Customers (Alphabetical Order): " + filteredNames(customers));
+            System.out.println("Total Purchase Amount: " + totalPurchaseAmount(customers));
             System.out.println("Customer(s) with Highest Purchase Amount: " + customerWithHighestPurchaseAmount.getName());
             System.out.println("Average Purchase Amount by City: " + averagePurchaseByCity);
         }
@@ -60,6 +61,25 @@ public class DataProcessor {
             customers.add(new Customer("Emily Lee", 38, "Chicago", Gender.Female, 180.0));
             customers.add(new Customer("Chris Wilson", 32, "San Francisco", Gender.Other, 90.0));
             return customers;
+        }
+
+        public static List<String> filteredNames(List<Customer> customers){
+
+            List<String> filteredNames = customers.stream()
+                    .filter(customer -> customer.getAge() >= 25 && customer.getAge() <= 40)
+                    .filter(customer -> customer.getCity().equals("New York"))
+                    .filter(customer -> customer.getGender() == Gender.Male || customer.getGender() == Gender.Female)
+                    .map(Customer::getName)
+                    .sorted()
+                    .collect(Collectors.toList());
+            return filteredNames;
+        }
+
+        public static double totalPurchaseAmount(List<Customer> customers){
+            double totalPurchaseAmount = customers.stream()
+                    .mapToDouble(Customer::getPurchaseAmount)
+                    .sum();
+            return totalPurchaseAmount;
         }
     }
 
